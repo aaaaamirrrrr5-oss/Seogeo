@@ -1,0 +1,43 @@
+/* ===== UX (v3.12.2) ===== */
+.qa-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 2px 8px}
+.qa-head b{font-size:15px}.qa-head .b{padding:6px 12px;font-size:12px}
+.qa{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.qa-b{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:1px solid var(--br);border-radius:18px;background:var(--cd);color:inherit;font:inherit;font-size:11px;font-weight:700;text-align:center;line-height:1.35;cursor:pointer;min-height:84px;box-shadow:var(--sh)}
+.qa-b:active{transform:scale(.97)}
+.qa-b .ic{display:grid;place-items:center;width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,var(--g1),var(--g2));font-size:19px;color:#fff}
+.qa-pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.qa-opt{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--br);border-radius:14px;font-size:13px}
+.qa-opt input{width:auto;margin:0}
+details.hg{margin:10px 0;border:1px solid var(--br);border-radius:20px;background:var(--cd);padding:0 10px 10px}
+details.hg>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 4px;font-weight:850;font-size:14px;cursor:pointer;list-style:none}
+details.hg>summary::-webkit-details-marker{display:none}
+details.hg>summary::after{content:"‹";transition:transform .15s;margin-inline-start:auto;font-size:18px}
+details.hg[open]>summary::after{transform:rotate(-90deg)}
+details.hg>summary small{order:2}
+.hq{width:100%;margin:6px 0 4px}
+.wp-fold{cursor:pointer;user-select:none}
+.wp-fold::after{content:"‹";margin-inline-start:auto;transition:transform .15s;font-size:16px}
+.wp-fold.open::after{transform:rotate(-90deg)}
+.wp-grid.wp-collapsed{display:none}
+@media(min-width:700px){.qa{grid-template-columns:repeat(8,minmax(0,1fr))}.qa-pick{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* Smart Dashboard Organizer: drag and touch-friendly reordering. */
+.qa-sort-list{display:flex;flex-direction:column;gap:7px;max-height:55vh;overflow:auto;overscroll-behavior:contain}
+.qa-sort{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid var(--br);border-radius:15px;background:var(--cd);transition:transform .16s,opacity .16s,border-color .16s}
+.qa-sort .qa-opt{flex:1;min-width:0;border:0;padding:6px 4px}
+.qa-sort .b{padding:7px 11px;min-width:36px}
+.qa-handle{font-size:22px;color:var(--mu);cursor:grab;touch-action:pan-y}
+.qa-sort.dragging{opacity:.48;border-style:dashed;transform:scale(.985)}
+@media(prefers-reduced-motion:reduce){.qa-sort{transition:none}.qa-b:active{transform:none}}
+
+/* --- 3.13.2: ظاهر --- */
+.hero small{display:block;margin-top:3px}
+.uh{font-size:12px;margin:4px 2px 8px;min-height:16px}.uh.ok{color:#0b7a62}.uh.warn{color:#b45309}.uh.bad{color:#b91c1c}
+.kt{margin:6px 0 4px;font-size:12px;padding:6px 12px;min-height:36px}
+.qa-head .b{min-height:38px}
+:focus-visible{outline:2px solid #0b7a62;outline-offset:2px;border-radius:12px}
+.ld::before{content:"";display:block;height:84px;border-radius:20px;margin:0 0 12px;background:linear-gradient(90deg,var(--cd),color-mix(in srgb,var(--cd) 82%,#0b7a62 18%),var(--cd));background-size:200% 100%;animation:uxsh 1.2s linear infinite}
+@keyframes uxsh{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.ld::before{animation:none}.qa-b:active,.tile:active{transform:none}}
+@media(max-width:719px){.bento>.tile:last-child:nth-child(odd),.wp-grid>.wp-card:last-child:nth-child(odd){grid-column:1/-1}}
+.qa-sort{touch-action:manipulation}

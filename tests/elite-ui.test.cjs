@@ -1,0 +1,10 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const html = fs.readFileSync(__dirname + '/../www/index.html', 'utf8');
+const css = fs.readFileSync(__dirname + '/../www/elite.css', 'utf8');
+assert.match(html, /href="elite\.css"/, 'elite visual layer is loaded');
+assert.match(html, /function safeLocalJSON\(key,fallback\)/, 'corrupt local preferences cannot crash startup');
+assert.match(css, /prefers-reduced-motion/, 'reduced motion is respected');
+assert.match(css, /:focus-visible/, 'keyboard focus remains visible');
+assert.match(css, /min-width:760px/, 'tablet/desktop layout is upgraded');
+console.log('PASS elite UI regression checks');

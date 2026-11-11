@@ -1,0 +1,46 @@
+/* Site Manager 4.3 — Quick Pro layer (additive; theme-aware via existing CSS variables). */
+.top .upl-btn{flex:none;width:auto;min-width:44px;min-height:44px;border-radius:14px;border:1px solid var(--br);background:var(--cd);color:var(--tx);font-size:13px;font-weight:700;cursor:pointer;display:grid;place-items:center;padding:0 10px;white-space:nowrap}
+.top .upl-btn:active{transform:scale(.94)}
+#upl_list{display:grid;gap:6px;margin-top:10px;max-height:min(56dvh,460px);overflow:auto;overscroll-behavior:contain}
+.upl-h{padding:6px 4px 0;font-size:12px}
+.upl-i{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 12px;border:1px solid var(--br);border-radius:14px;background:var(--cd);color:var(--tx);font:inherit;text-align:start;cursor:pointer;transition:border-color .15s,background .15s,transform .12s}
+.upl-i i{font-style:normal;font-size:20px;width:28px;text-align:center}
+.upl-i.on,.upl-i:hover{border-color:var(--a);background:color-mix(in srgb,var(--a) 10%,var(--cd))}
+.upl-i:active{transform:scale(.985)}
+.upl-off{position:fixed;inset-inline:0;top:0;z-index:60;padding:calc(8px + env(safe-area-inset-top)) 14px 8px;background:#b45309;color:#fff;font-size:12.5px;text-align:center;box-shadow:0 4px 16px #0004}
+.upl-top{position:fixed;left:20px;bottom:calc(158px + env(safe-area-inset-bottom));z-index:6;width:48px;height:48px;border-radius:50%;border:1px solid var(--br);background:var(--cd);color:var(--tx);font-size:20px;box-shadow:0 8px 22px #0003;cursor:pointer;animation:upl-in .2s ease both}
+.upl-top[hidden]{display:none}
+.upl-ptr{position:fixed;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-70px);z-index:40;padding:8px 16px;border-radius:20px;background:var(--cd);color:var(--tx);border:1px solid var(--br);font-size:12.5px;box-shadow:0 8px 24px #0003;transition:transform .18s ease,background .18s;pointer-events:none}
+.upl-ptr.on{transform:translate(-50%,0)}
+.upl-ptr.ready{background:var(--a);color:#fff;border-color:var(--a)}
+.sheet>div{transition:transform .2s cubic-bezier(.2,.75,.25,1)}
+/* Skeleton loading: richer than a bare ellipsis, still announced via role=status. */
+.ld{position:relative;overflow:hidden}
+.ld::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,color-mix(in srgb,var(--tx) 7%,transparent) 50%,transparent 70%);transform:translateX(-100%);animation:upl-shine 1.3s ease-in-out infinite}
+@keyframes upl-shine{to{transform:translateX(100%)}}
+@keyframes upl-in{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+html[dir=rtl] .ld::after{animation-direction:reverse}
+@media(prefers-reduced-motion:reduce){.ld::after,.upl-top{animation:none!important}.upl-ptr,.sheet>div,.upl-i{transition:none!important}}
+
+/* Today's focus card */
+.upl-focus{background:linear-gradient(160deg,color-mix(in srgb,var(--a) 9%,var(--cd)),var(--cd));margin-top:12px}
+.upl-spark{display:block;width:100%;height:56px;margin:10px 0 4px;color:var(--a)}
+.upl-trend{align-self:flex-start;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;background:color-mix(in srgb,var(--mu) 16%,transparent);color:var(--mu)}
+.upl-trend.up{background:#16a34a22;color:#15803d}.upl-trend.down{background:#dc262622;color:#dc2626}
+.upl-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.upl-chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 12px;border-radius:14px;border:1px solid var(--br);background:var(--cd);color:var(--tx);font:inherit;font-size:12.5px;cursor:pointer;transition:transform .12s,border-color .15s}
+.upl-chip:active{transform:scale(.97)}.upl-chip b{font-size:15px}
+.upl-chip.warn{border-color:#f59e0b88}.upl-chip.danger{border-color:#dc262688}.upl-chip.info:hover,.upl-chip:hover{border-color:var(--a)}
+.upl-ok{padding:6px 2px}
+
+/* Single quick-jump control stays in the top bar; floating button is intentionally disabled. */
+body.smb-sheet-open .upl-top{display:none}
+/* One-handed (left-handed) mode swaps the remaining floating top button. */
+html.upl-lefty .fab{right:auto;left:20px}
+html.upl-lefty .upl-top{left:auto;right:20px}
+/* High contrast */
+html.upl-hc{--br:color-mix(in srgb,var(--tx) 55%,transparent);--mu:color-mix(in srgb,var(--tx) 82%,var(--bg))}
+html.upl-hc .cd,html.upl-hc .tile,html.upl-hc input,html.upl-hc select,html.upl-hc textarea{border:1.5px solid var(--br)}
+html.upl-hc :focus-visible{outline-width:4px;outline-color:var(--tx)}
+/* User-forced calm mode (in addition to the OS setting) */
+html.upl-calm *,html.upl-calm *::before,html.upl-calm *::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}

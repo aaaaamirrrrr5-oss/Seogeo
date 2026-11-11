@@ -1,0 +1,89 @@
+/* Site Manager — AURORA premium design layer v3.13.9
+   Presentation-only overrides. Existing application structure and behavior are preserved. */
+:root{
+  --bg:#f5f6fc;--cd:#ffffff;--tx:#17172d;--mu:#626681;--br:#e4e5f2;
+  --a:#7058e8;--a2:#4d83f5;--c:#16a9c7;
+  --sh:0 12px 34px rgba(43,38,105,.075);
+  --sm-violet:#7058e8;--sm-blue:#4d83f5;--sm-navy:#11142d;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#090d1d;--cd:#121832;--tx:#f0f1ff;--mu:#a4aac9;--br:#283153;
+  --a:#a18bff;--a2:#65a4ff;--c:#50d7e8;
+  --sh:0 16px 42px rgba(0,0,0,.28);
+  color-scheme:dark;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#090d1d;--cd:#121832;--tx:#f0f1ff;--mu:#a4aac9;--br:#283153;
+    --a:#a18bff;--a2:#65a4ff;--c:#50d7e8;
+    --sh:0 16px 42px rgba(0,0,0,.28);color-scheme:dark;
+  }
+}
+body{background:var(--bg);color:var(--tx)}
+.hero,.wp-hero{
+  background:
+    radial-gradient(ellipse at 88% 8%,rgba(119,100,255,.34),transparent 38%),
+    radial-gradient(ellipse at 4% 100%,rgba(57,151,255,.22),transparent 42%),
+    linear-gradient(128deg,#171536 0%,#33236f 52%,#24558c 100%);
+  border:1px solid rgba(190,183,255,.2);
+  box-shadow:0 22px 55px rgba(73,58,165,.22);
+}
+.hero:after{background:rgba(94,179,255,.18)}
+.ic{background:linear-gradient(135deg,var(--sm-violet),var(--sm-blue));box-shadow:0 7px 18px rgba(93,83,222,.18)}
+button.p{background:linear-gradient(125deg,#7058e8,#4d83f5);box-shadow:0 8px 20px rgba(91,91,220,.24)}
+button.p:hover{filter:brightness(1.06)}
+.nav{background:color-mix(in srgb,#151633 93%,transparent);border:1px solid rgba(191,185,255,.17)}
+.nav .on{background:linear-gradient(130deg,#7058e8,#4d83f5);box-shadow:0 5px 18px rgba(102,91,230,.38)}
+.nav .on:after{background:#c9c1ff;box-shadow:0 0 10px rgba(201,193,255,.6)}
+.tile,.cd,.wp-card,.sc,.qa-b,details.hg{
+  border-color:color-mix(in srgb,var(--br) 88%,var(--a));
+  box-shadow:var(--sh);
+}
+.tile:focus-within,.cd:focus-within,.wp-card:focus-within{border-color:var(--a)}
+button.b:focus-visible,.chip:focus-visible,.av:focus-visible,.back:focus-visible{
+  outline:3px solid color-mix(in srgb,var(--a) 72%,white);outline-offset:3px
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--a)!important;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 18%,transparent)
+}
+.chip.on{background:linear-gradient(120deg,var(--a),var(--a2));color:white;border-color:transparent}
+.pill{background:color-mix(in srgb,var(--a) 9%,var(--cd));}
+.sheet{background:rgba(8,10,28,.62)}
+.sheet>div{background:var(--bg);border:1px solid var(--br);box-shadow:0 -18px 70px rgba(4,7,26,.34)}
+.fab{background:linear-gradient(135deg,#7058e8,#4d83f5);box-shadow:0 10px 26px rgba(91,91,220,.35)}
+.ld{background:linear-gradient(100deg,var(--cd) 20%,color-mix(in srgb,var(--a) 9%,var(--cd)) 38%,var(--cd) 58%)}
+a{color:var(--a)}
+/* Keep semantic status colors distinct from brand colors. */
+.s-processing,.s-publish,.s-approve,.s-instock,.s-completed{color:#087b58}
+.s-on-hold,.s-pending,.s-draft,.s-hold,.s-private{color:#a85b0b}
+.s-cancelled,.s-failed,.s-outofstock,.s-spam,.s-trash{color:#c52d48}
+:root[data-theme="dark"] .s-processing,:root[data-theme="dark"] .s-publish,
+:root[data-theme="dark"] .s-approve,:root[data-theme="dark"] .s-instock,
+:root[data-theme="dark"] .s-completed{color:#6ee7b7}
+:root[data-theme="dark"] .s-on-hold,:root[data-theme="dark"] .s-pending,
+:root[data-theme="dark"] .s-draft,:root[data-theme="dark"] .s-hold,
+:root[data-theme="dark"] .s-private{color:#fbbf70}
+:root[data-theme="dark"] .s-cancelled,:root[data-theme="dark"] .s-failed,
+:root[data-theme="dark"] .s-outofstock,:root[data-theme="dark"] .s-spam,
+:root[data-theme="dark"] .s-trash{color:#ff8799}
+@media(min-width:760px){
+  #app{max-width:1080px}
+  .bento{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:380px){
+  .hero{border-radius:24px;padding:18px}
+  .tile{border-radius:19px}
+  .cd{border-radius:18px}
+}
+@media(hover:hover){
+  .tile:hover,.wp-card:hover,.sc:hover,.qa-b:hover{
+    transform:translateY(-2px);
+    border-color:color-mix(in srgb,var(--a) 45%,var(--br));
+    box-shadow:0 18px 40px color-mix(in srgb,var(--a) 12%,transparent)
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .tile,.wp-card,.sc,.qa-b,.cd,button,.nav{transition:none!important}
+}

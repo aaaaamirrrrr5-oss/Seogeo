@@ -1,0 +1,29 @@
+{
+  "name": "site-manager-app",
+  "version": "5.1.0",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "7.0.0",
+    "@capacitor/cli": "7.0.0",
+    "@capacitor/core": "7.0.0",
+    "@capacitor/local-notifications": "7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "3.0.5",
+    "jsdom": "26.1.0"
+  },
+  "scripts": {
+    "test": "node tests/i18n.test.cjs && node tests/i18n-runtime.test.cjs && node tests/inline-handlers.test.cjs && node tests/theme-schema-ui.test.cjs && node tests/capability-scanner.test.cjs && node tests/backup-crypto.test.cjs && node tests/control-center.test.cjs && node tests/plus-logic.test.cjs && node tests/ux-logic.test.cjs && node tests/app-fixes-3131.test.cjs && node tests/ux-polish.test.cjs && node tests/elite-ui.test.cjs && node tests/premium-theme.test.cjs && npm run check:ux-pro && node tests/ux-pro.test.cjs && node tests/dialog-ux.test.cjs && node tests/upgrade.test.cjs && node tests/security-hardening.test.cjs && node tests/shield.test.cjs && node tests/static-safety.test.cjs && node tests/auth-connect.test.cjs && node tests/startup-regression.test.cjs",
+    "check:inline": "node tests/check-inline.cjs",
+    "check:js": "node --check www/i18n.js && node tests/i18n-runtime.test.cjs && node --check www/editor.js && node --check www/plus.js && node --check www/native.js && node --check www/pro.js && node --check www/ux.js && node --check www/a11y.js && node --check www/backup-crypto.js && node --check www/control-center.js && node --check www/ux-pro.js && node tests/ux-logic.test.cjs && node tests/check-inline.cjs && node tests/theme-schema-ui.test.cjs && node tests/capability-scanner.test.cjs && node --check www/motion.js && node tests/premium-theme.test.cjs && node --check www/upgrade.js && node --check www/shield.js && node --check www/version.js && node --check www/safe-url.js && node tests/auth-connect.test.cjs && node tests/startup-regression.test.cjs",
+    "check:handlers": "node tests/inline-handlers.test.cjs",
+    "test:browser": "node tests/ux-browser.test.cjs",
+    "check:capabilities": "node tests/capability-scanner.test.cjs",
+    "test:security": "node tests/security-hardening.test.cjs && node tests/ux-logic.test.cjs && node tests/app-fixes-3131.test.cjs && node tests/ux-polish.test.cjs",
+    "test:all": "npm run check:js && npm test && npm run test:dom && npm run test:browser",
+    "test:dom": "node tests/editor-dom.test.cjs",
+    "check:ux-pro": "node --check www/ux-pro.js",
+    "test:upgrade": "node tests/upgrade.test.cjs",
+    "version:set": "node scripts/set-version.cjs"
+  }
+}

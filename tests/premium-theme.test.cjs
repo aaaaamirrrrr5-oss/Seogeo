@@ -1,0 +1,13 @@
+const fs=require("fs"),path=require("path"),assert=require("assert");
+const root=path.join(__dirname,"..");
+const html=fs.readFileSync(path.join(root,"www/index.html"),"utf8");
+const css=fs.readFileSync(path.join(root,"www/premium.css"),"utf8");
+const motion=fs.readFileSync(path.join(root,"www/motion.js"),"utf8");
+assert(html.includes('href="premium.css"'),"premium stylesheet is loaded");
+assert(css.includes('--a:#7058e8')&&css.includes('--a2:#4d83f5'),"violet/blue brand tokens exist");
+assert(css.includes(':root[data-theme="dark"]')&&css.includes(':root[data-theme="dark"]'),"explicit dark theme tokens exist");
+assert(css.includes('@media(prefers-color-scheme:dark)'),"system dark preference is supported");
+assert(css.includes('prefers-reduced-motion:reduce'),"reduced motion is respected");
+assert(motion.includes('uiPrefs.theme==="system"'),"system theme tracks Android appearance changes");
+assert(html.includes('localStorage.setItem("smb_ui_prefs"'),"theme preferences remain persisted");
+console.log("PASS premium theme layer, persisted theme, system sync and reduced-motion contract");

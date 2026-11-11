@@ -1,0 +1,12 @@
+const fs=require('fs');const path=require('path');const assert=require('assert');
+const root=path.join(__dirname,'..');
+const html=fs.readFileSync(path.join(root,'www/index.html'),'utf8');
+const css=fs.readFileSync(path.join(root,'www/ux-pro.css'),'utf8');
+const js=fs.readFileSync(path.join(root,'www/ux-pro.js'),'utf8');
+assert(html.includes('href="ux-pro.css"'),'premium UX stylesheet is linked');
+assert(html.includes('src="ux-pro.js"'),'premium UX behavior is linked');
+assert(html.indexOf('href="ux-pro.css"')>html.lastIndexOf('</style>'),'UX stylesheet loads after inline theme overrides');
+for(const token of ['100dvh','focus-visible','prefers-reduced-motion','safe-area-inset-bottom','overscroll-behavior'])assert(css.includes(token),`CSS includes ${token}`);
+for(const token of ['MutationObserver','aria-current','aria-live','role","status','document.title'])assert(js.includes(token),`UX behavior includes ${token}`);
+assert(!/setInterval\s*\(/.test(js),'no polling timers introduced');
+console.log('PASS UX Pro: stylesheet order, responsive/safe-area design, reduced motion, focus, live regions and navigation semantics');

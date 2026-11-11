@@ -1,0 +1,9 @@
+{
+  "appId": "ir.sitemanager.app",
+  "appName": "مدیریت سایت",
+  "webDir": "www",
+  "loggingBehavior": "none",
+  "server": { "androidScheme": "https" },
+  "android": { "allowMixedContent": false, "webContentsDebuggingEnabled": false },
+  "plugins": { "CapacitorHttp": { "enabled": true } }
+}

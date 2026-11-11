@@ -1,0 +1,8 @@
+/* ===== Plus (v3.9) ===== */
+.nav button{position:relative}
+.nb{position:absolute;top:2px;right:calc(50% - 22px);min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#dc2626;color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center;line-height:1;box-shadow:0 0 0 2px var(--cd,#fff)}
+#plus_sg h4{font-size:14px}
+#plus_sg .chip small{opacity:.7}
+.chk{cursor:default}
+#plus_al .chk{cursor:pointer}
+@media(min-width:900px){#ed .in{max-width:760px}}

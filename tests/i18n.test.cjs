@@ -1,0 +1,18 @@
+const fs=require('fs'),path=require('path'),assert=require('assert');
+const root=path.resolve(__dirname,'..');
+const html=fs.readFileSync(path.join(root,'www/index.html'),'utf8');
+const i18n=fs.readFileSync(path.join(root,'www/i18n.js'),'utf8');
+assert(html.includes('<script src="i18n.js"></script>'),'i18n runtime is loaded before app logic');
+assert(html.includes('id="ui_language"'),'language selector is available in appearance settings');
+assert(html.includes('language:$("#ui_language")?.value'),'language preference is saved with UI preferences');
+assert(html.includes('window.SMB_I18N?.setLanguage(uiPrefs.language||"fa")'),'saved language is restored on startup');
+for(const lang of ['fa','en','ar']) assert(i18n.includes(`${lang}:`),`locale ${lang} is supported`);
+assert(i18n.includes("root.dir=rtl?'rtl':'ltr'"),'document direction follows selected language');
+assert(i18n.includes("root.lang=lang"),'document language attribute follows selected language');
+assert(i18n.includes('MutationObserver'),'newly rendered UI is translated');
+assert(i18n.includes('lastText'),'dynamic text updates do not reuse stale translations');
+assert(i18n.includes("['SCRIPT','STYLE','TEXTAREA','CODE','PRE','NOSCRIPT']"),'code and user-editable content are excluded from translation');
+assert(i18n.includes('lastAttr'),'dynamic attributes do not reuse stale translations');
+assert(i18n.includes("'سفارش‌ها':['Orders','الطلبات']"),'key UI labels have English and Arabic translations');
+assert(html.includes('window.SMB_I18N?.locale||"fa-IR"'),'number/date locale follows selected language');
+console.log('PASS three-language selector, persistence, locale, RTL/LTR and dynamic UI translation contract');

@@ -1,0 +1,18 @@
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '..');
+const html = fs.readFileSync(path.join(root, 'www/index.html'), 'utf8');
+const js = fs.readFileSync(path.join(root, 'www/control-center.js'), 'utf8');
+const css = fs.readFileSync(path.join(root, 'www/control-center.css'), 'utf8');
+assert(html.includes('href="control-center.css"'), 'control center styles are loaded');
+assert(html.includes('<script src="backup-crypto.js"></script>') && html.includes('<script src="control-center.js"></script>'), 'backup and control center scripts are loaded');
+assert(html.includes('openUltimateCenter()'), 'control center is reachable from the main hub');
+assert(js.includes("api('/site-health')") && js.includes("api('/updates')"), 'diagnostics use live site endpoints');
+assert(js.includes('SMB_BACKUP_CRYPTO.encrypt') && js.includes('SMB_BACKUP_CRYPTO.decrypt'), 'backup uses authenticated encryption');
+assert(js.includes('credentials') && js.includes('persistSiteKey'), 'restore uses the secure Android credential store');
+assert(js.includes('duplicate') && js.includes('hasCredentials'), 'restore validates and safely merges sites');
+assert(js.includes("credentials: { key: s.key || '' }"), 'backup exports only the primary site key, not short-lived session tokens');
+assert(!js.includes('accessToken: s.accessToken'), 'short-lived access tokens are excluded from portable backup');
+assert(css.includes('.ultimate-hero') && css.includes('@media(min-width:760px)'), 'responsive premium control-center styling exists');
+console.log('PASS control center: live diagnostics, encrypted backup integration, safe merge and responsive UI');

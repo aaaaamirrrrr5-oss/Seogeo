@@ -1,0 +1,16 @@
+const fs=require('fs');const path=require('path');const assert=require('assert');
+const root=path.join(__dirname,'..');
+const html=fs.readFileSync(path.join(root,'www/index.html'),'utf8');
+const ux=fs.readFileSync(path.join(root,'www/ux-pro.js'),'utf8');
+assert(html.includes('setAttribute("role","dialog")'),'sheets expose dialog semantics');
+assert(html.includes('setAttribute("aria-modal","true")'),'sheets are announced as modal');
+assert(html.includes('e.key==="Escape"'),'Escape closes a sheet');
+assert(html.includes('e.shiftKey&&document.activeElement===first'),'focus is trapped in modal sheets');
+assert(html.includes('sheetReturnFocus?.isConnected'),'focus returns to the invoking control');
+assert(html.includes('type="search" enterkeyhint="search"'),'generic lists use a search input');
+assert(html.includes('window.__smbSearchTimer=window.setTimeout(lpLoad,320)'),'generic list search is debounced');
+assert(html.includes("if(event.key==='Enter')"),'generic list search submits on Enter');
+assert(ux.includes('v.setAttribute("role","main")'),'main landmark excludes the navigation');
+assert(ux.includes('h.focus({preventScroll:true})'),'page changes move focus to the new heading');
+assert(ux.includes('if(hint)el.setAttribute("aria-label",hint)'),'placeholder-only controls get accessible names');
+console.log('PASS dialog UX: modal semantics, keyboard trap, Escape, focus restore, debounced search and accessible page navigation');

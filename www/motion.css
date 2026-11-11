@@ -1,0 +1,45 @@
+/* Site Manager — MOTION DESIGN SYSTEM v3.13.4 */
+:root{--sm-ease:cubic-bezier(.2,.75,.25,1);--sm-spring:cubic-bezier(.18,.89,.32,1.22)}
+html{scroll-behavior:smooth}
+.hero{position:relative;overflow:hidden;isolation:isolate;animation:sm-hero-in .72s var(--sm-ease) both}
+.hero:before,.hero:after{content:"";position:absolute;pointer-events:none;z-index:-1;border-radius:50%}
+.hero:before{width:230px;height:230px;inset-inline-start:-92px;bottom:-150px;background:#a5ffe8;opacity:.14;filter:blur(2px);animation:sm-orbit 12s ease-in-out infinite alternate}
+.hero:after{width:150px;height:150px;inset-inline-end:-52px;top:-85px;border:1px solid #ffffff35;box-shadow:0 0 0 18px #ffffff0b,0 0 0 38px #ffffff08;animation:sm-breathe 5s ease-in-out infinite}
+.hero .big{animation:sm-number-in .8s .12s var(--sm-spring) both}
+.tile,.wp-card,.qa-b,.sc{transform:translateZ(0);will-change:transform}
+.tile:hover,.wp-card:hover,.sc:hover{transform:translateY(-3px)}
+.tile:active,.wp-card:active,.qa-b:active,.sc:active{transform:scale(.975)}
+.sm-enter{animation:sm-rise-in .48s var(--sm-ease) both;animation-delay:var(--sm-delay,0ms)}
+.sm-ripple{position:relative;overflow:hidden}
+.sm-ripple-wave{position:absolute;z-index:5;pointer-events:none;border-radius:50%;background:currentColor;opacity:.16;transform:scale(0);animation:sm-ripple .58s ease-out forwards}
+button.b,.nav button,.av,.back{transform:translateZ(0)}
+button.b:active,.nav button:active,.av:active,.back:active{transform:scale(.965)}
+button.p{position:relative;overflow:hidden}
+button.p:after{content:"";position:absolute;inset:-80% auto -80% -45%;width:30%;transform:rotate(22deg);background:linear-gradient(90deg,transparent,#ffffff38,transparent);transition:inset-inline-start .7s ease}
+button.p:hover:after{inset-inline-start:125%}
+.nav{animation:sm-nav-in .55s .12s var(--sm-ease) both}
+.nav .on{position:relative}
+.nav .on:after{content:"";position:absolute;inset-inline:22%;bottom:3px;height:2px;border-radius:9px;background:#70f0c5;box-shadow:0 0 12px #70f0c5;animation:sm-nav-line .25s var(--sm-ease) both}
+.sheet{animation:sm-fade-in .2s ease both}
+.sheet>div{animation:sm-sheet-up .38s var(--sm-spring) both}
+.toast{animation:sm-toast-in .34s var(--sm-spring) both}
+.ld:before{background-size:220% 100%;animation:sm-shimmer 1.45s linear infinite}
+details.hg>summary:after,.wp-fold:after{transition:transform .28s var(--sm-ease)}
+input,select,textarea{transition:border-color .2s ease,box-shadow .2s ease,background .2s ease}
+.qa-b .ic{transition:transform .28s var(--sm-spring),filter .25s ease}
+.qa-b:hover .ic{transform:translateY(-3px) rotate(-4deg);filter:saturate(1.18)}
+@keyframes sm-rise-in{from{opacity:0;transform:translate3d(0,15px,0) scale(.985)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+@keyframes sm-hero-in{from{opacity:0;transform:translate3d(0,12px,0) scale(.99)}to{opacity:1;transform:none}}
+@keyframes sm-number-in{from{opacity:0;transform:translateY(9px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes sm-orbit{to{transform:translate3d(24px,-15px,0) scale(1.14)}}
+@keyframes sm-breathe{0%,100%{transform:scale(.94);opacity:.65}50%{transform:scale(1.08);opacity:1}}
+@keyframes sm-ripple{to{transform:scale(1);opacity:0}}
+/* نوار پایین با translateX(-50%) وسط‌چین شده؛ انیمیشن نباید آن را با transform:none لغو کند (نوار نیمه‌بیرون از صفحه می‌افتاد) */
+@keyframes sm-nav-in{from{opacity:0;transform:translateX(var(--sm-nav-x,-50%)) translateY(14px)}to{opacity:1;transform:translateX(var(--sm-nav-x,-50%))}}
+@keyframes sm-nav-line{from{transform:scaleX(.25);opacity:0}to{transform:scaleX(1);opacity:1}}
+@keyframes sm-fade-in{from{opacity:0}to{opacity:1}}
+@keyframes sm-sheet-up{from{opacity:.7;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sm-toast-in{from{opacity:0;transform:translate(-50%,12px) scale(.96)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes sm-shimmer{to{background-position:-220% 0}}
+@media(hover:none){.tile:hover,.wp-card:hover,.sc:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero,.hero .big,.nav,.sheet,.sheet>div,.toast,.sm-enter{animation:none!important}.hero:before,.hero:after{animation:none!important}.sm-ripple-wave{display:none}.tile,.wp-card,.qa-b,.sc,button.b,.nav button,.av,.back{transition:none!important;transform:none!important}}

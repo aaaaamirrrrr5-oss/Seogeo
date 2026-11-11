@@ -1,0 +1,21 @@
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+const assert = require('assert');
+const { webcrypto } = require('crypto');
+const source = fs.readFileSync(path.join(__dirname, '../www/backup-crypto.js'), 'utf8');
+const window = { crypto: webcrypto };
+const context = { window, crypto: webcrypto, TextEncoder, TextDecoder, btoa: s => Buffer.from(s, 'binary').toString('base64'), atob: s => Buffer.from(s, 'base64').toString('binary') };
+vm.runInNewContext(source, context, { timeout: 1000 });
+(async () => {
+  const payload = { format: 'smb-config', version: 1, sites: [{ url: 'https://example.test', credentials: { key: 'secret-test-key' } }], label: 'پشتیبان آزمایشی' };
+  const encrypted = await window.SMB_BACKUP_CRYPTO.encrypt(payload, 'correct horse battery');
+  assert.equal(encrypted.format, 'smb-encrypted-backup');
+  assert.notEqual(encrypted.ciphertext.includes('secret-test-key'), true, 'credentials must not appear in ciphertext');
+  assert.deepEqual(JSON.parse(JSON.stringify(await window.SMB_BACKUP_CRYPTO.decrypt(encrypted, 'correct horse battery'))), payload);
+  await assert.rejects(() => window.SMB_BACKUP_CRYPTO.decrypt(encrypted, 'wrong password 123'), /گذرواژه اشتباه/);
+  const tampered = { ...encrypted, ciphertext: encrypted.ciphertext.slice(0, -4) + 'AAAA' };
+  await assert.rejects(() => window.SMB_BACKUP_CRYPTO.decrypt(tampered, 'correct horse battery'));
+  await assert.rejects(() => window.SMB_BACKUP_CRYPTO.encrypt(payload, 'short'), /حداقل ۱۲/);
+  console.log('PASS encrypted backup crypto: AES-GCM roundtrip, password rejection, tamper detection and minimum passphrase');
+})().catch(e => { console.error(e); process.exitCode = 1; });

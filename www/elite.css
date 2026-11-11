@@ -1,0 +1,58 @@
+/* Site Manager — NEXUS visual system v3.13.3 */
+:root{--bg:#f2f6f4;--cd:#fff;--tx:#10251e;--mu:#52665c;--br:#dfeae4;--a:#087b61;--a2:#22bd91;--c:#e69a69;--sh:0 14px 36px rgba(13,54,39,.075);color-scheme:light}
+:root[data-theme="dark"]{--bg:#08130f;--cd:#111f19;--tx:#eff8f2;--mu:#9aafa4;--br:#263b30;--a:#29bd91;--a2:#54d9aa;--c:#f0a477;--sh:0 14px 36px rgba(0,0,0,.24);color-scheme:dark}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08130f;--cd:#111f19;--tx:#eff8f2;--mu:#9aafa4;--br:#263b30;--a:#29bd91;--a2:#54d9aa;--c:#f0a477;--sh:0 14px 36px rgba(0,0,0,.24);color-scheme:dark}}
+body{font-feature-settings:"kern";letter-spacing:0}
+#app{padding-bottom:calc(118px + env(safe-area-inset-bottom))}
+.top{position:relative}.top h1{letter-spacing:-.7px}
+.hero{isolation:isolate;border:1px solid #ffffff20;background:radial-gradient(ellipse at 90% 0%,#ffffff28,transparent 42%),linear-gradient(125deg,#073d34 0%,#087b61 54%,#20a982 100%);box-shadow:0 22px 52px #087b612e}
+.hero .big{font-size:clamp(30px,7vw,42px);letter-spacing:-1px}
+.cd,.tile,.wp-card,.sc,.qa-b,.qa-sort,details.hg{backdrop-filter:blur(12px);border-color:color-mix(in srgb,var(--br) 82%,transparent);box-shadow:var(--sh)}
+.tile,.cd{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.tile:active,.cd.row:active{transform:translateY(0) scale(.985)}
+button,input,select,textarea{accent-color:var(--a)}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--a)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 17%,transparent)}
+button.b,.chip,.av,.back{transition:transform .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease}
+button.b:active,.chip:active{transform:scale(.975)}
+button.p{background:linear-gradient(125deg,#087b61,#20b88c);box-shadow:0 7px 18px #087b612c}
+button.p:hover{filter:brightness(1.05)}
+.nav{background:color-mix(in srgb,#10251e 92%,transparent);border:1px solid #ffffff20;backdrop-filter:blur(22px) saturate(150%);box-shadow:0 18px 48px #0005}
+.nav .on{box-shadow:0 5px 16px #20b88c55}
+.sheet{backdrop-filter:blur(8px)}
+.sheet>div{border:1px solid var(--br);box-shadow:0 -18px 70px #0003}
+.form-actions{border-top:1px solid var(--br)}
+.wp-hero{background:radial-gradient(circle at 85% 15%,#ffffff20,transparent 35%),linear-gradient(125deg,#102d25,#087b61 70%,#1e9c78)}
+.wp-card:hover,.sc:hover,.qa-b:hover{border-color:color-mix(in srgb,var(--a) 50%,var(--br));box-shadow:0 16px 36px color-mix(in srgb,var(--a) 10%,transparent)}
+.gchips{backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg) 90%,transparent)}
+.st,.pill{border:1px solid var(--br)}
+.toast{box-shadow:0 12px 34px #0004}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--a) 75%,white);outline-offset:3px}
+@media(min-width:760px){#app{max-width:1040px}.hub{grid-template-columns:repeat(4,minmax(0,1fr))}.wp-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.bento{gap:16px}.tile{min-height:122px;padding:20px}.cd{padding:18px}.wp-card{min-height:140px;padding:17px}}
+@media(max-width:380px){#app{padding-left:11px;padding-right:11px}.hub{gap:7px}.hub .tile{padding:10px 4px}.nav{width:98vw}.nav button{font-size:9px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* ===== 3.13.5: رفع مشکلات UX/UI ===== */
+#app{min-height:100vh;min-height:100dvh}
+.sheet>div{max-height:92vh;max-height:92dvh;overscroll-behavior:contain}
+.back{width:44px;height:44px}
+.nav button{min-height:48px;justify-content:center}
+.tile,.wp-card,.qa-b,.sc{will-change:auto}
+/* پوسته‌های دایره‌ای hero: موقعیت‌های قدیمی left/top با inset منطقی تداخل داشتند */
+.hero:before{left:auto;top:auto}.hero:after{left:auto;bottom:auto}
+/* حالت افقی: نوار کناری روی محتوا نیفتد و در صفحه‌های کوتاه اسکرول شود */
+@media(orientation:landscape) and (max-height:540px){
+  .nav{top:max(8px,env(safe-area-inset-top));bottom:max(8px,env(safe-area-inset-bottom));overflow-y:auto;justify-content:flex-start;gap:2px}
+  .nav button{flex:0 0 auto;min-height:44px}
+  #app{margin-left:96px;margin-right:auto}
+}
+.toast{max-width:min(92vw,520px);text-align:center}
+@media(forced-colors:active){.nav .on,button.p{border:2px solid ButtonText}}
+
+/* دسترس‌پذیری 3.13.6 */
+[role=button]:not(button):focus-visible,.sheet>div:focus-visible{outline:3px solid color-mix(in srgb,var(--a) 75%,white);outline-offset:3px}
+.sheet>div:focus{outline:0}
+[role=button]:not(button){cursor:pointer}
+input,select,textarea{min-height:44px}
+input[type=checkbox],input[type=radio]{min-height:0;min-width:22px;min-height:22px}
+.uh.ok{color:#08684f}.uh.warn{color:#92400e}
+@media(prefers-contrast:more){:root{--mu:#2f3d36;--br:#7f8f86}.hero{background:#073d34}}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- فقط گواهی‌های سیستمی معتبرند؛ CA نصب‌شده توسط کاربر/بدافزار (MITM) پذیرفته نمی‌شود.
+     HTTP ساده فقط برای سایتی است که کاربر آگاهانه با http:// اضافه کرده (کنترل در برنامه). -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
