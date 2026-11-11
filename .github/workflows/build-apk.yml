@@ -1,0 +1,201 @@
+name: ساخت APK اپ Site Manager
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    name: آزمون و ساخت بسته یکپارچه
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+    steps:
+      - name: دریافت سورس
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: نصب Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: نصب Java و کش Gradle
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+
+
+      - name: نصب وابستگی‌های اپ
+        run: npm install --include=dev --no-audit --no-fund --no-progress
+
+      - name: بررسی ابزارهای محلی و فایل قفل ایجادشده
+        shell: bash
+        run: |
+          test -s package-lock.json
+          test -x node_modules/.bin/cap
+          test -x node_modules/.bin/capacitor-assets
+          node --version
+          npm --version
+
+      - name: بررسی آسیب‌پذیری وابستگی‌های runtime
+        shell: bash
+        run: |
+          if ! npm audit --omit=dev --audit-level=high; then
+            echo '::warning::npm audit failed or could not reach the registry; build and unit tests continue.'
+          fi
+
+      - name: بررسی JavaScript و آزمون‌های اپ 
+        run: npm run check:js
+
+      - name: اجرای همه آزمون‌های منطق و امنیت اپ
+        run: npm test
+
+      - name: آزمون DOM ویرایشگر
+        run: npm run test:dom
+
+      - name: آزمون مرورگر (در صورت وجود Playwright)
+        run: npm run test:browser --if-present
+
+
+
+      - name: ایجاد پروژه بومی Capacitor
+        shell: bash
+        run: |
+          test -x node_modules/.bin/cap
+          ./node_modules/.bin/cap add android
+
+      - name: همگام‌سازی نسخه اپ با Gradle
+        shell: bash
+        run: |
+          APP_VERSION=$(node -p "require('./package.json').version")
+          VERSION_CODE=$(node -e "const [a,b,c]=require('./package.json').version.split('.').map(Number);const v=a*1000000+b*1000+c;if(!Number.isSafeInteger(v)||v<1||v>2100000000)process.exit(1);process.stdout.write(String(v))")
+          sed -i -E "s/versionCode [0-9]+/versionCode $VERSION_CODE/; s/versionName \"[^\"]+\"/versionName \"$APP_VERSION\"/" android/app/build.gradle
+          grep -q "versionName \"$APP_VERSION\"" android/app/build.gradle
+          grep -q "versionCode $VERSION_CODE" android/app/build.gradle
+
+      - name: افزودن کلاس‌های امن اندروید و تنظیم Manifest
+        run: python scripts/prepare-android.py
+
+      - name: تولید آیکن‌ها و صفحه آغاز
+        shell: bash
+        run: |
+          test -x node_modules/.bin/capacitor-assets
+          ./node_modules/.bin/capacitor-assets generate --android
+
+      - name: همگام‌سازی Capacitor
+        run: ./node_modules/.bin/cap sync android
+
+      - name: ساخت APK آزمایشی
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug
+
+      - name: بررسی APK و ثبت فراداده ساخت
+        shell: bash
+        run: |
+          APK=android/app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          APP_VERSION=$(node -p "require('./package.json').version")
+          VERSION_CODE=$(grep -Eo 'versionCode [0-9]+' android/app/build.gradle | head -1 | awk '{print $2}')
+          mkdir -p dist/bundle
+          {
+            echo "Suite Version: $APP_VERSION"
+            echo "Version Code: $VERSION_CODE"
+            echo "Commit: $GITHUB_SHA"
+            echo "Package: ir.sitemanager.app"
+            echo "APK SHA-256: $(sha256sum "$APK" | cut -d ' ' -f1)"
+            echo "Package Lock SHA-256: $(sha256sum package-lock.json | cut -d ' ' -f1)"
+          } > dist/BUILD-METADATA.txt
+          cp "$APK" dist/bundle/site-manager-debug.apk
+          cp dist/BUILD-METADATA.txt dist/bundle/
+          cp README-fa.md dist/bundle/راهنمای-نصب.md
+          (cd dist/bundle && zip -qr "../site-manager-app-artifacts-$APP_VERSION.zip" .)
+          test -s "dist/site-manager-app-artifacts-$APP_VERSION.zip"
+
+      - name: بارگذاری بسته کامل اپ و افزونه
+        uses: actions/upload-artifact@v7
+        with:
+          name: site-manager-app-${{ github.run_number }}
+          if-no-files-found: error
+          path: |
+            android/app/build/outputs/apk/debug/app-debug.apk
+            dist/BUILD-METADATA.txt
+            dist/site-manager-app-artifacts-*.zip
+            package-lock.json
+          retention-days: 30
+
+      # Debug APK must remain a green build without release secrets.
+      - name: بررسی پیکربندی امضای Release
+        id: signing
+        shell: bash
+        run: |
+          missing=()
+          [[ -n "$KEYSTORE_BASE64" ]] || missing+=(ANDROID_KEYSTORE_BASE64)
+          [[ -n "$KEYSTORE_PASSWORD" ]] || missing+=(ANDROID_KEYSTORE_PASSWORD)
+          [[ -n "$KEY_ALIAS" ]] || missing+=(ANDROID_KEY_ALIAS)
+          [[ -n "$KEY_PASSWORD" ]] || missing+=(ANDROID_KEY_PASSWORD)
+          if [[ ${#missing[@]} -eq 0 ]]; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+            echo 'All release signing secrets are present.'
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo "::notice::Release signing skipped; missing Secrets: ${missing[*]}. The Debug APK was built successfully."
+          fi
+
+      - name: ساخت APK و AAB امضاشده
+        if: ${{ steps.signing.outputs.ready == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > android/release-key.jks
+          test -s android/release-key.jks
+          keytool -list -keystore android/release-key.jks -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" >/dev/null
+          cat >> android/app/build.gradle <<'GRADLE'
+
+          android {
+            signingConfigs {
+              release {
+                storeFile file("../release-key.jks")
+                storePassword System.getenv("KEYSTORE_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("KEY_PASSWORD")
+              }
+            }
+            buildTypes {
+              release {
+                signingConfig signingConfigs.release
+                minifyEnabled false
+              }
+            }
+          }
+          GRADLE
+          cd android
+          ./gradlew --no-daemon assembleRelease bundleRelease
+
+      - name: بارگذاری خروجی امضاشده
+        if: ${{ steps.signing.outputs.ready == 'true' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: site-manager-release-${{ github.run_number }}
+          if-no-files-found: error
+          path: |
+            android/app/build/outputs/apk/release/*.apk
+            android/app/build/outputs/bundle/release/*.aab
+          retention-days: 30
+
+      - name: پاک‌سازی کلید امضا از Runner
+        if: ${{ always() }}
+        run: if [[ -d android ]]; then rm -f android/release-key.jks; fi
