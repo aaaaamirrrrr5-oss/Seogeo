@@ -1,0 +1,10 @@
+node_modules
+android
+*.jks
+*.keystore
+BUILD-METADATA.txt
+.DS_Store
+dist/
+bridge/dist/
+__pycache__/
+*.py[cod]
